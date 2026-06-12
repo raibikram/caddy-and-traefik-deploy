@@ -10,9 +10,9 @@ services:
       - "--log.level=DEBUG" # Set log level to DEBUG for detailed logs
       - "--providers.docker=true" # Enable Docker provider
       - "--providers.docker.exposedbydefault=false" # Only expose containers with explicit labels
+      - "--entrypoints.traefik.address=:8080" # Define entry point for Traefik dashboard
       - "--entrypoints.web.address=:80" # Define entry point for HTTP
       - "--entrypoints.websecure.address=:443" # Define entry point for HTTPS
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # Use TLS challenge for ACME
       - "--certificatesresolvers.cert-resolver.acme.httpchallenge.entrypoint=web" # Use HTTP challenge for ACME
       - "--certificatesresolvers.cert-resolver.acme.email=support@bikram-rai.com" # Set email for ACME registration
       - "--certificatesresolvers.cert-resolver.acme.storage=/letsencrypt/acme.json" # Define storage for ACME certificates
@@ -28,53 +28,10 @@ services:
       - "443:443" # Expose HTTPS port
     networks:
       - traefik_network
+      - project-a-network
 
 networks:
   traefik_network:
     name: traefik_network
-
-#      name: traefik
-
-# services:
-#   api:
-#     build:
-#       context: .
-#     container_name: api
-#     environment:
-#       - PORT=8080
-#     labels:
-#       - "traefik.enable=true"
-#       - "traefik.http.routers.api.rule=Host(`api.localhost`)"
-#       - "traefik.http.routers.api.entrypoints=web"
-#       - "traefik.http.services.api.loadbalancer.server.port=8080"
-#     networks:
-#       - traefik_network
-
-#   traefik:
-#     image: traefik:latest
-#     container_name: traefik
-#     command:
-#       - "--api=true" # Enable the Traefik API and dashboard.
-#       - "--api.dashboard=true" # Show the Traefik dashboard.
-#       - "--log.level=DEBUG" # Use debug logs for routing issues.
-#       - "--providers.docker=true" # Read service definitions from Docker labels.
-#       - "--providers.docker.exposedbydefault=false" # Only expose containers that opt in.
-#       - "--entrypoints.web.address=:80" # Listen for public HTTP traffic on port 80.
-#       - "--entrypoints.websecure.address=:443" # Listen for public HTTPS traffic on port 443.
-#       - "--certificatesresolvers.cert-resolver.acme.httpchallenge.entrypoint=web" # Use the HTTP-01 ACME challenge on the web entrypoint.
-#       - "--certificatesresolvers.cert-resolver.acme.email=support@bikram-rai.com" # Register ACME certificates with this email.
-#       - "--certificatesresolvers.cert-resolver.acme.storage=/letsencrypt/acme.json" # Persist ACME state on disk.
-#       - "--entrypoints.web.http.redirections.entrypoint.to=websecure" # Redirect HTTP requests to HTTPS.
-#       - "--entrypoints.web.http.redirections.entrypoint.scheme=https" # Force redirects to use HTTPS.
-#     volumes:
-#       - "/var/run/docker.sock:/var/run/docker.sock:ro" # Let Traefik read Docker metadata.
-#       - "./certificates/letsencrypt:/letsencrypt" # Store ACME certificates locally.
-#     ports:
-#       - "80:80" # Publish the HTTP entrypoint.
-#       - "443:443" # Publish the HTTPS entrypoint.
-#     networks:
-#       - traefik_network
-
-# networks:
-#   traefik_network:
-#     name: traefik_network
+  project-a-network:
+    name: project-a-network

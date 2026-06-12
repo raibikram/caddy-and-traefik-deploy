@@ -16,7 +16,7 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro # Mount Caddyfile for configuration read-only
     labels:
-      - "traefik.enable-true"
+      - "traefik.enable=true"
       - "traefik.http.routers.my-router.rule=Host(`petnestnepal@gmail.com`)" # Define routing rule based on host
       - "traefik.http.services.my-service.loadbalancer.server.port=80" # Define the port for the service
       - "traefik.http.routers.my-router.entrypoints=websecure" # Define entry point for the router
