@@ -1,0 +1,40 @@
+name: server-application-a
+
+services:
+  api-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    deploy:
+      replicas: 5 # Scale the service to 5 instances
+    networks:
+      - internal_network
+
+  caddy:
+    image: caddy:latest
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro # Mount Caddyfile for configuration read-only
+    labels:
+      - "traefik.enable-true"
+      - "traefik.http.routers.my-router.rule=Host(`petnestnepal@gmail.com`)" # Define routing rule based on host
+      - "traefik.http.services.my-service.loadbalancer.server.port=80" # Define the port for the service
+      - "traefik.http.routers.my-router.entrypoints=websecure" # Define entry point for the router
+      - "traefik.docker.network=project-a-network" # Specify the Docker network for Traefik to use
+      - "traefik.http.routers.my-router.tls=true" # Enable TLS for the router
+      - "traefik.http.routers.my-router.tls.certresolver=cert-resolver" # Use the specified certificate resolver for TLS
+    
+    networks:
+      - project-a-network
+      - internal_network
+
+
+
+networks:
+  internal_network:
+    name: internal_network
+    driver: bridge
+
+  project-a-network:
+    name: project-a-network
+    external: true

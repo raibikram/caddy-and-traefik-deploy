@@ -1,0 +1,3 @@
+# Docker 
+- Build: docker build -t api .
+- RUN: docker run -it --rm -p 8080:8080 api
