@@ -10,7 +10,7 @@ services:
       - "--log.level=DEBUG" # Set log level to DEBUG for detailed logs
       - "--providers.docker=true" # Enable Docker provider
       - "--providers.docker.exposedbydefault=false" # Only expose containers with explicit labels
-      - "--entrypoints.web.address=:8080" # Define entry point for HTTP
+      - "--entrypoints.web.address=:80" # Define entry point for HTTP
       - "--entrypoints.websecure.address=:443" # Define entry point for HTTPS
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # Use TLS challenge for ACME
       - "--certificatesresolvers.cert-resolver.acme.httpchallenge.entrypoint=web" # Use HTTP challenge for ACME
@@ -28,14 +28,10 @@ services:
       - "443:443" # Expose HTTPS port
     networks:
       - traefik_network
-      - project-a-network
 
 networks:
   traefik_network:
     name: traefik_network
-  project-a-network:
-    name: project-a-network
-    external: true
 
 #      name: traefik
 
